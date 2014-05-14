@@ -1,1 +1,0 @@
-INDEX VERSION 1.126+/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/.metadata/.plugins/org.eclipse.jdt.core
