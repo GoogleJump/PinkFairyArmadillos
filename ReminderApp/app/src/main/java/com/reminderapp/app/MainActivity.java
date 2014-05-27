@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Context;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import java.util.*;
+
 
 
 public class MainActivity extends Activity{
@@ -19,7 +23,7 @@ private Context context;
         list[1] = "hi1";
         list[2] = "hi2";
         RESTClient.newReminder(context, list, 111, 111); //create a new reminder
-        //RESTClient.listReminders(context); list reminders in database
+        //RESTClient.listReminders(context);
         setContentView(R.layout.activity_main);
     }
 

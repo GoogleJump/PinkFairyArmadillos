@@ -13,16 +13,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import android.util.Log;
+
+
 
 public class RESTClient {
     private static final String REMINDER_URL = "https://flash-energy-585.appspot.com/_ah/api/reminders/v1/reminders/";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public static void newReminder(Context context, String[] reminderList, int latitude, int longitude) {
+    public static void newReminder(Context context, String[] reminderList, double latitude, double longitude) {
         RequestParams p = new RequestParams();
         JSONObject jsonParams = new JSONObject();
         JSONArray list = new JSONArray(Arrays.asList(reminderList));
@@ -47,15 +52,27 @@ public class RESTClient {
         }
 
     }
-    public static void listReminders(Context context) {
+    public static ArrayList listReminders(Context context){
+    ArrayList<String> list = new ArrayList<String>();
+     client.get(context, REMINDER_URL + "list", new JsonHttpResponseHandler()  {
+         @Override
+         public void onSuccess(JSONObject response){
+             try {
+                JSONArray items = response.getJSONArray("items");
+                 System.out.println(items.getJSONObject(1).get("reminder"));
+             }
+             catch (JSONException e){
+                 System.out.println(e.toString());
+             }
+         }
 
-     client.get(context, REMINDER_URL + "list", new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(String response) {
-                System.out.println(response);
-            }
+         @Override
+         public void onFailure ( Throwable e, JSONObject errorResponse ) {
+             String msg = "Object *" + e.toString() + "*" + errorResponse.toString();
+             Log.i("testing","onFailure: " + msg);
+         }
      });
-
+        return list;
     }
  }
 
