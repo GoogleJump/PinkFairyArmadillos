@@ -4,5 +4,6 @@
     <string name="app_name">Reminder App</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <color name="turquoise">#41C3AC</color>
 
 </resources>

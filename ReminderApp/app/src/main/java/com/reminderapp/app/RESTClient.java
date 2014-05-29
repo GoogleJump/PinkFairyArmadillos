@@ -27,13 +27,15 @@ public class RESTClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public static void newReminder(Context context, String[] reminderList, double latitude, double longitude) {
+    public static void newReminder(Context context, String username, String title, String[] reminderList, double latitude, double longitude) {
         RequestParams p = new RequestParams();
         JSONObject jsonParams = new JSONObject();
         JSONArray list = new JSONArray(Arrays.asList(reminderList));
 
         StringEntity entity;
         try {
+            jsonParams.put("user", username);
+            jsonParams.put("title", title);
             jsonParams.put("latitude", latitude);
             jsonParams.put("longitude", longitude);
             jsonParams.put("reminder",list);
@@ -44,6 +46,7 @@ public class RESTClient {
         }
         try{
             entity = new StringEntity(jsonParams.toString());
+
             client.post(context, REMINDER_URL+"createreminder" ,entity, "application/json", new JsonHttpResponseHandler() { });
         }
         catch (UnsupportedEncodingException e)
