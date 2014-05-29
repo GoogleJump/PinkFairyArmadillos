@@ -1,0 +1,20 @@
+application: flash-energy-585
+version: v1
+runtime: go
+threadsafe: true
+api_version: go1
+
+handlers:
+# static assets
+- url: /favicon\.ico
+  static_files: static/favicon.ico
+  upload: static/favicon\.ico
+  mime_type: image/x-icon
+
+# Go app
+- url: /.*
+  secure: always
+  script: _go_app
+# Endpoints handler
+- url: /_ah/spi/.*
+  script: _go_app

@@ -1,0 +1,197 @@
+{
+ "kind": "discovery#restDescription",
+ "etag": "\"0NZZm4UuLZgEQBhMTwnFS1XIMrM/CvpYfiGFWLMUraP2RslLrNxA1pw\"",
+ "discoveryVersion": "v1",
+ "id": "reminders:v1",
+ "name": "reminders",
+ "version": "v1",
+ "description": "This is an API",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "protocol": "rest",
+ "baseUrl": "https://flash-energy-585.appspot.com/_ah/api/reminders/v1/reminders/",
+ "basePath": "/_ah/api/reminders/v1/reminders/",
+ "rootUrl": "https://flash-energy-585.appspot.com/_ah/api/",
+ "servicePath": "reminders/v1/reminders/",
+ "batchPath": "batch",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "auth": {
+  "oauth2": {
+   "scopes": {
+    "https://www.googleapis.com/auth/userinfo.email": {
+     "description": "View your email address"
+    },
+    "https://www.googleapis.com/auth/userinfo.profile": {
+     "description": "View basic information about your account"
+    }
+   }
+  }
+ },
+ "schemas": {
+  "NewReminder": {
+   "id": "NewReminder",
+   "type": "object",
+   "properties": {
+    "due date/time": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "latitude": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "longitude": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "reminder": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "test": {
+     "type": "string"
+    }
+   }
+  },
+  "Reminder": {
+   "id": "Reminder",
+   "type": "object",
+   "properties": {
+    "author": {
+     "type": "string"
+    },
+    "date": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "id": {
+     "type": "string"
+    },
+    "location": {
+     "type": "array",
+     "items": {
+      "type": "integer",
+      "format": "int32"
+     }
+    },
+    "reminder": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "test": {
+     "type": "string"
+    }
+   }
+  },
+  "RemindersList": {
+   "id": "RemindersList",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "Reminder"
+     }
+    }
+   }
+  }
+ },
+ "resources": {
+  "reminders": {
+   "methods": {
+    "createReminder": {
+     "id": "reminders.reminders.createReminder",
+     "path": "createreminder",
+     "httpMethod": "POST",
+     "description": "Create a Reminder.",
+     "request": {
+      "$ref": "NewReminder",
+      "parameterName": "resource"
+     },
+     "response": {
+      "$ref": "Reminder"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile"
+     ]
+    },
+    "delete": {
+     "id": "reminders.reminders.delete",
+     "path": "delete/{id}",
+     "httpMethod": "DELETE",
+     "description": "Delete a single reminder.",
+     "parameters": {
+      "id": {
+       "type": "string",
+       "required": true,
+       "location": "path"
+      }
+     },
+     "parameterOrder": [
+      "id"
+     ]
+    },
+    "list": {
+     "id": "reminders.reminders.list",
+     "path": "list",
+     "httpMethod": "GET",
+     "description": "List most recent reminders.",
+     "response": {
+      "$ref": "RemindersList"
+     }
+    }
+   }
+  }
+ }
+}
