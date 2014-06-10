@@ -22,7 +22,7 @@ var (
 // It also serves as (part of) a response of ReminderService.
 type Reminder struct {
 	Id      string    `json:"id,omitempty" datastore:"-"`
-	User  string    `json:"user" datastore:",noindex"`
+	User  string    `json:"user" datastore:"User"`
 	Title  string   `json:"title" datastore:",noindex"`
 	Location []float64    `json:"location" datastore:",noindex"`
 	Reminder []string    `json:"reminder" datastore:",noindex"`
@@ -35,16 +35,23 @@ type ReminderService struct {
 
 // ReminderList is a response type of ReminderService.List method
 type RemindersList struct {
-	Items []*Reminder `json:"items"`
+	Items []*Reminder `json:"items"`	
+}
+
+type ReminderUserQuery struct {
+	UserName string `json:"username" endpoints:"required"`
 }
 
 // List responds with a list of all reminders ordered by Date field.
 // Most recent reminders come first.
 func (gs *ReminderService) List(
-	r *http.Request, _ *endpoints.VoidMessage, resp *RemindersList) error {
+	r *http.Request, req *ReminderUserQuery, resp *RemindersList) error {
 
 	c := endpoints.NewContext(r)
-	q := datastore.NewQuery("Reminder").Order("-Date").Limit(10)
+		
+	username := req.UserName
+	
+	q := datastore.NewQuery("Reminder").Filter("User =", username)
 	reminder := make([]*Reminder, 0, 10)
 	keys, err := q.GetAll(c, &reminder)
 	if err != nil {
