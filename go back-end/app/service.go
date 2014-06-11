@@ -27,6 +27,7 @@ type Reminder struct {
 	Location []float64    `json:"location" datastore:",noindex"`
 	Reminder []string    `json:"reminder" datastore:",noindex"`
 	Date    time.Time `json:"date"`
+	Urgency int `json:"urgency"`
 }
 
 // ReminderService
@@ -72,7 +73,7 @@ type NewReminder struct {
 	UserName string `json:"username" endpoints:"required"`
 	Time time.Time `json:"due date/time" endpoints:"required"`
     Title  string   `json:"title" endpoints:"required"`
-
+	Urgency int `json:"urgency" endpoints:"required"`
 }
 
 // createReminder creates a new Reminder based on provided NewReminder.
@@ -90,7 +91,7 @@ func (gs *ReminderService) CreateReminder(
 	reminder.Date = time.Now()
 	reminder.User = req.UserName
 	reminder.Title = req.Title
-
+	reminder.Urgency = req.Urgency
 	
 
 	key, err := datastore.Put(

@@ -162,8 +162,9 @@ public class MainActivity extends Activity implements
             String reminderTitle = title.getText().toString();
             double latitude = lat.getValue();
             double longitude = lng.getValue();
+            int urgencyHardCoded = 18;
             RESTClient rest = new RESTClient();
-            rest.newReminder(context,email,reminderTitle,list,latitude,longitude);
+            rest.newReminder(context,email,reminderTitle,list,latitude,longitude,urgencyHardCoded);
             Thread.currentThread().setContextClassLoader(rest.getClass().getClassLoader());
             Toast.makeText(this,"New Reminder Created! Check API explorer for confirmation.",Toast.LENGTH_LONG).show();
         }

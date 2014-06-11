@@ -27,7 +27,7 @@ public class RESTClient {
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
-    public static void newReminder(Context context, String username, String title, String[] reminderList, double latitude, double longitude) {
+    public static void newReminder(Context context, String username, String title, String[] reminderList, double latitude, double longitude, int urgency) {
         JSONObject jsonParams = new JSONObject();
         JSONArray list = new JSONArray(Arrays.asList(reminderList));
 
@@ -38,6 +38,7 @@ public class RESTClient {
             jsonParams.put("latitude", latitude);
             jsonParams.put("longitude", longitude);
             jsonParams.put("reminder",list);
+            jsonParams.put("urgency", urgency);
         }
         catch (JSONException e)
         {
@@ -59,7 +60,7 @@ public class RESTClient {
         params.put("username",user);
         client.get(context, REMINDER_URL + "list", params, new JsonHttpResponseHandler()  {
                 @Override
-                public void onSuccess(JSONObject response){
+                public void  onSuccess(JSONObject response){
                         Log.i("testing", response.toString());
                         //urgency
                 }

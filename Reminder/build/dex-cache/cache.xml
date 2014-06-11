@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/pre-dexed/debug/classes-fcb022c203144189f4b16887b0e97f185a345d96.jar"
+        jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/build/exploded-aar/com.google.android.gms/play-services/4.4.52/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3dfdf1db5ce5ea2999a5dcde8c8e650b02660059"/>
+    <item
+        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/pre-dexed/debug/android-async-http-1.4.4-d12386f1bbebb8484051b552d3828ba031751f85.jar"
+        jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/libs/android-async-http-1.4.4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3bae85a076241828810bf8fbcc12e5891d5fc34c"/>
+    <item
+        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/pre-dexed/debug/basic-http-client-android-0.88-3bdee9bd01d96622de207f8efabeea5b11ab3b83.jar"
+        jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/libs/basic-http-client-android-0.88.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="62aa3f0df0148b934c29a8085d01e9839955e06e"/>
+    <item
+        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/pre-dexed/debug/classes-ad3545c931110cc31667cb4567f33535c78a1616.jar"
+        jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
+    <item
+        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+
+</pre-dex-items>
