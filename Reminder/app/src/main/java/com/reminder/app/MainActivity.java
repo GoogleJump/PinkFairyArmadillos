@@ -1,47 +1,46 @@
-package com.reminderapp.app;
+package com.reminder.app;
 
-import android.app.Activity;
-import android.content.IntentSender;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.content.Context;
-import android.accounts.*;
-import com.google.android.gms.common.api.GoogleApiClient.*;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.plus.*;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.ConnectionResult;
-import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
-import android.view.*;
-import android.widget.EditText;
-import android.widget.NumberPicker;
-import android.widget.Toast;
-import com.google.android.gms.plus.model.people.Person;
+ import android.app.Activity;
+ import android.content.IntentSender;
+ import android.os.Bundle;
+ import android.util.Log;
+ import android.view.Menu;
+ import android.view.MenuItem;
+ import android.content.Context;
+ import android.accounts.*;
+ import com.google.android.gms.common.api.GoogleApiClient.*;
+ import com.google.android.gms.common.api.GoogleApiClient;
+ import com.google.android.gms.plus.*;
+ import com.google.android.gms.common.ConnectionResult;
+ import android.content.Intent;
+ import android.content.IntentSender.SendIntentException;
+ import android.view.*;
+ import android.widget.EditText;
+ import android.widget.NumberPicker;
+ import android.widget.Toast;
+ import com.google.android.gms.plus.model.people.Person;
 
 
 
 public class MainActivity extends Activity implements
-        ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
-private Context context;
-private EditText title;
-private EditText reminder;
-private NumberPicker lat;
-private NumberPicker lng;
+        ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener{
+    private Context context;
+    private EditText title;
+    private EditText reminder;
+    private NumberPicker lat;
+    private NumberPicker lng;
 
 
-private Person currentPerson;
-private String personName;
-private String personGooglePlusProfile;
-private String email;
+    private Person currentPerson;
+    private String personName;
+    private String personGooglePlusProfile;
+    private String email;
 
-private static final int RC_SIGN_IN = 0;
-private GoogleApiClient mGoogleApiClient;
-private boolean mIntentInProgress;
-private boolean mSignInClicked;
-private ConnectionResult mConnectionResult;
+    private static final int RC_SIGN_IN = 0;
+    private GoogleApiClient mGoogleApiClient;
+    private boolean mIntentInProgress;
+    private boolean mSignInClicked;
+    private ConnectionResult mConnectionResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,19 +62,19 @@ private ConnectionResult mConnectionResult;
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.button).setOnClickListener(this);
 
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                .addApi(Plus.API, null)
+                .addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
 
+        //RESTClient.listReminders(context, email);
 
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -163,9 +162,10 @@ private ConnectionResult mConnectionResult;
             String reminderTitle = title.getText().toString();
             double latitude = lat.getValue();
             double longitude = lng.getValue();
-            RESTClient.newReminder(context,email,reminderTitle ,list,latitude,longitude); //creating a new reminder
+            RESTClient rest = new RESTClient();
+            rest.newReminder(context,email,reminderTitle,list,latitude,longitude);
+            Thread.currentThread().setContextClassLoader(rest.getClass().getClassLoader());
             Toast.makeText(this,"New Reminder Created! Check API explorer for confirmation.",Toast.LENGTH_LONG).show();
-
         }
     }
     @Override

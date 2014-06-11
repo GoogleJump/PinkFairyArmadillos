@@ -1,4 +1,4 @@
-package com.reminderapp.app;
+package com.reminder.app;
 
 /**
  * Created by jordanvega on 5/24/14.
@@ -28,13 +28,12 @@ public class RESTClient {
     private static AsyncHttpClient client = new AsyncHttpClient();
 
     public static void newReminder(Context context, String username, String title, String[] reminderList, double latitude, double longitude) {
-        RequestParams p = new RequestParams();
         JSONObject jsonParams = new JSONObject();
         JSONArray list = new JSONArray(Arrays.asList(reminderList));
 
         StringEntity entity;
         try {
-            jsonParams.put("user", username);
+            jsonParams.put("username", username);
             jsonParams.put("title", title);
             jsonParams.put("latitude", latitude);
             jsonParams.put("longitude", longitude);
@@ -55,27 +54,22 @@ public class RESTClient {
         }
 
     }
-    public static ArrayList listReminders(Context context){
-    ArrayList<String> list = new ArrayList<String>();
-     client.get(context, REMINDER_URL + "list", new JsonHttpResponseHandler()  {
-         @Override
-         public void onSuccess(JSONObject response){
-             try {
-                JSONArray items = response.getJSONArray("items");
-                 System.out.println(items.getJSONObject(1).get("reminder"));
-             }
-             catch (JSONException e){
-                 System.out.println(e.toString());
-             }
-         }
-
-         @Override
-         public void onFailure ( Throwable e, JSONObject errorResponse ) {
-             String msg = "Object *" + e.toString() + "*" + errorResponse.toString();
-             Log.i("testing","onFailure: " + msg);
-         }
-     });
-        return list;
+    public static ArrayList listReminders(Context context, String user){
+        RequestParams params = new RequestParams();
+        params.put("username",user);
+        client.get(context, REMINDER_URL + "list", params, new JsonHttpResponseHandler()  {
+                @Override
+                public void onSuccess(JSONObject response){
+                        Log.i("testing", response.toString());
+                        //urgency
+                }
+                @Override
+                public void onFailure ( Throwable e, JSONObject errorResponse ) {
+                    String msg = "Object *" + e.toString() + "*" + errorResponse.toString();
+                    Log.i("testing","onFailure: " + msg);
+                }
+            });
+        return null;
     }
- }
+}
 
