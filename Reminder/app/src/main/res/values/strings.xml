@@ -4,5 +4,9 @@
     <string name="app_name">"Reminder "</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string-array name="reminderList">
+        <item>Get eggs</item>
+        <item>Do Laundry</item>
+    </string-array>
 
 </resources>
