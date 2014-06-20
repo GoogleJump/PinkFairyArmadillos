@@ -10,8 +10,16 @@ public class Reminder {
     protected int latitude;
     protected String reminderText;
 
-    Reminder(String reminder){
+    Reminder(String reminder) {
         reminderText = reminder;
+    }
+
+    Reminder(int id, int urgency, int longitude, int latitude, String reminderText) {
+        this.id = id;
+        this.urgency = urgency;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.reminderText = reminderText;
     }
 
     public int getUrgency() {
