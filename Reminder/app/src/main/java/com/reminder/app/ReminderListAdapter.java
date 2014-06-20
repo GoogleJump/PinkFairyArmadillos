@@ -40,7 +40,7 @@ public class ReminderListAdapter extends BaseAdapter{
             ReminderView update = (ReminderView)view;
             update.setReminder(reminderList.get(i));
             return update;
-        }else {
+        } else {
             return new ReminderView(context, reminderList.get(i));
         }
     }

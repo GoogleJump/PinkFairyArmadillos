@@ -17,6 +17,7 @@ public class ReminderList extends Activity {
     private Button addButton;
     protected ReminderListAdapter reminderAdapter;
     protected ArrayList<Reminder> reminderArray;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,14 +25,14 @@ public class ReminderList extends Activity {
         addActionListeners();
     }
 
-    private void initLayout(){
+    private void initLayout() {
         setContentView(R.layout.default_page);
         reminderList = (ListView)findViewById(R.id.reminderList);
         addButton = (Button)findViewById(R.id.newReminderButton);
-        //temporary List of reminders to work with - replaced when we get add functionality and local storage
+        // temporary List of reminders to work with - replaced when we get add functionality and local storage
         Resources object = this.getResources();
         String[] reminderStrings = object.getStringArray(R.array.reminderList);
-        //fill the ListArray
+        // fill the ListArray
         reminderArray = new ArrayList<Reminder>();
         for (String item: reminderStrings){
             Reminder current = new Reminder(item);
@@ -42,18 +43,18 @@ public class ReminderList extends Activity {
     }
 
 
-    //Not entirely sure this is needed for the final , this'll probably get taken car of on another page
-    protected void addReminder(String reminder){
+    // Not entirely sure this is needed for the final , this'll probably get taken car of on another page
+    protected void addReminder(String reminder) {
         Reminder newReminder = new Reminder(reminder);
         reminderArray.add(newReminder);
         reminderAdapter.notifyDataSetChanged();
     }
 
-    //various action listeners for the widgets
-    protected void addActionListeners(){
+    // various action listeners for the widgets
+    protected void addActionListeners() {
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                //TODO: Button click moves to add reminder page
+                //TODO(Kylie): Button click moves to add reminder page
             }
         });
     }

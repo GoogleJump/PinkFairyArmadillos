@@ -18,10 +18,10 @@ public class ReminderView extends LinearLayout {
 
     public ReminderView(Context context, Reminder reminder) {
         super(context);
-        //defines it by the XML
+        // defines it by the XML
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.reminder, this, true);
-        //find the correct items
+        // find the correct items
         this.reminder = reminder;
         completedCheck = (CheckBox)findViewById(R.id.completedCheck);
         reminderText = (TextView)findViewById(R.id.reminderDisplay);
@@ -29,7 +29,7 @@ public class ReminderView extends LinearLayout {
         setReminder(reminder);
     }
 
-    public void setReminder(Reminder newReminder){
+    public void setReminder(Reminder newReminder) {
         reminder = newReminder;
         reminderText.setText(reminder.getReminderText());
 
