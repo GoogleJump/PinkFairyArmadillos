@@ -107,8 +107,8 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
                 && !mGoogleApiClient.isConnecting()) {
             mSignInClicked = true;
             resolveSignInError();
-            ProgressBar signingIn = (ProgressBar)findViewById(R.id.progressBar);
-            signingIn.setVisibility(View.VISIBLE);
+            ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
+            progressBar.setVisibility(View.VISIBLE);
         }
     }
     @Override

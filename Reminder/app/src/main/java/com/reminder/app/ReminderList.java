@@ -1,7 +1,5 @@
 package com.reminder.app;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -10,14 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 /**
  * Created by Kylie Williamson on 6/15/14.
  */
-public class ReminderList extends Fragment {
+public class ReminderList extends Fragment implements View.OnClickListener {
     private ListView reminderList;
     private Button addButton;
     protected ReminderListAdapter reminderAdapter;
@@ -26,12 +23,14 @@ public class ReminderList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.default_page, container, false);
+        initLayout(rootView);
         return rootView;
     }
 
     private void initLayout(View v) {
         reminderList = (ListView)v.findViewById(R.id.reminderList);
         addButton = (Button)v.findViewById(R.id.newReminderButton);
+        addButton.setOnClickListener(this);
         // temporary List of reminders to work with - replaced when we get add functionality and local storage
         Resources object = this.getResources();
         String[] reminderStrings = object.getStringArray(R.array.reminderList);
@@ -53,11 +52,11 @@ public class ReminderList extends Fragment {
         reminderAdapter.notifyDataSetChanged();
     }
 
-    // various action listeners for the widgets
-    protected void addActionListeners() {
-        addButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-            }
-        });
+    public void onClick(View view) {
+        if (view.getId() == R.id.newReminderButton)
+        {
+            //TODO Kylie: can go to add reminder page BUT we can have it be part of the action bar with a + button
+        }
     }
+
 }
