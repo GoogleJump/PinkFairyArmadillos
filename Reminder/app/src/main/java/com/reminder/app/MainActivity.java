@@ -42,6 +42,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         context = this.getApplicationContext();
         createNavigationDrawer();
         getLoggedInUser();
+        selectItem(0);
     }
 
     @Override
@@ -228,7 +229,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = new RemindersLayout();
+                fragment = new ReminderList();
                 break;
             case 1:
                 signOutUser();
