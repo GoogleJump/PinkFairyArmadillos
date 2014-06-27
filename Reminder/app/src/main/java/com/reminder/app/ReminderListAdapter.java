@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Kylie Williamson on 6/15/14.
  */
-public class ReminderListAdapter extends BaseAdapter{
+public class ReminderListAdapter extends BaseAdapter {
     private Context context;
     private List<Reminder> reminderList;
 
