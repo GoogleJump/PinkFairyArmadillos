@@ -4,5 +4,14 @@
     <string name="app_name">"Reminder "</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="sign_out_menu">Sign Out</string>
+
+    <string-array name="navigation_drawer_items_array">
+        <item>Create</item>
+        <item>Sign out!</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 </resources>

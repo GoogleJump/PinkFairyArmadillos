@@ -8,6 +8,12 @@
         revision="19.1.0"
         sha1="62aa3f0df0148b934c29a8085d01e9839955e06e"/>
     <item
+        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/pre-dexed/debug/android-smart-image-view-1.0.0-2f74fce05ebb68c7fde0aeabb241099ca70d929b.jar"
+        jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/libs/android-smart-image-view-1.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="d76ea8c3e9a60101244d6d04aff8cc75888570f0"/>
+    <item
         dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/pre-dexed/debug/classes-fcb022c203144189f4b16887b0e97f185a345d96.jar"
         jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/build/exploded-aar/com.google.android.gms/play-services/4.4.52/classes.jar"
         jumboMode="false"

@@ -1,51 +1,37 @@
 package com.reminder.app;
 
 import android.app.Activity;
-import android.content.IntentSender;
 import android.os.Bundle;
-import android.util.Log;
-import android.content.Context;
+
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient.*;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.plus.*;
 import com.google.android.gms.common.ConnectionResult;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.view.*;
-import android.widget.Toast;
-import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.maps.model.*;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import android.view.animation.*;
+import android.widget.ProgressBar;
 
 public class LoginActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
-    private Context context;
-    private Person currentPerson;
-    private String personName;
-    private String personGooglePlusProfile;
-    private String email;
     private static final int RC_SIGN_IN = 0;
     private GoogleApiClient mGoogleApiClient;
     private boolean mIntentInProgress;
     private boolean mSignInClicked;
     private ConnectionResult mConnectionResult;
-    private GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        context = this.getApplicationContext();
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
-        map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
-        LatLng test = new LatLng(-33.867, 151.206);
-        map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(test, 13));
-        map.addMarker(new MarkerOptions()
-                .title("test")
-                .snippet("test")
-                .position(test));
+        setUpLogin();
+    }
+
+    public void setUpLogin() {
+        SignInButton signInButton = (SignInButton)findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener(this);
+        addAnimation(signInButton);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -54,6 +40,10 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
                 .build();
     }
 
+    public void addAnimation(SignInButton button) {
+        Animation slide = AnimationUtils.loadAnimation(this, R.anim.abc_slide_in_bottom);
+        button.startAnimation(slide);
+    }
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
@@ -117,21 +107,16 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
                 && !mGoogleApiClient.isConnecting()) {
             mSignInClicked = true;
             resolveSignInError();
+            ProgressBar signingIn = (ProgressBar)findViewById(R.id.progressBar);
+            signingIn.setVisibility(View.VISIBLE);
         }
     }
     @Override
     public void onConnected(Bundle connectionHint) {
         mSignInClicked = false;
         if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
-            currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-            personName = currentPerson.getDisplayName();
-            //String personPhoto = currentPerson.getImage(); getting image
-            personGooglePlusProfile = currentPerson.getUrl();
-            email = Plus.AccountApi.getAccountName(mGoogleApiClient);
-            Toast.makeText(this,"Welcome "+email,Toast.LENGTH_SHORT).show();
-            Intent createReminderPage = new Intent(context,MainActivity.class);
-            createReminderPage.putExtra("email", email);
-            startActivity(createReminderPage);
+            Intent mainActivityPage = new Intent(this,MainActivity.class);
+            startActivity(mainActivityPage);
         }
     }
 }
