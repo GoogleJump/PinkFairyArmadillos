@@ -58,5 +58,4 @@ public class ReminderList extends Fragment implements View.OnClickListener {
             //TODO Kylie: can go to add reminder page BUT we can have it be part of the action bar with a + button
         }
     }
-
 }
