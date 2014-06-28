@@ -1,6 +1,7 @@
 package com.reminder.app;
 
  import android.content.IntentSender;
+ import android.graphics.Typeface;
  import android.os.Bundle;
  import android.content.Context;
  import android.content.Intent;
@@ -16,10 +17,13 @@ package com.reminder.app;
  import android.app.*;
  import android.app.ActionBar;
 
+ import java.security.PolicySpi;
+
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener {
     private Context context;
     private static final int RC_SIGN_IN = 0;
     private static final int PROFILE_PIC_SIZE = 100;
+    private static final String FONT = "Roboto-Thin.ttf";
     private GoogleApiClient mGoogleApiClient;
     private boolean mIntentInProgress;
     private boolean mSignInClicked;
@@ -34,15 +38,17 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     private ListView mDrawerList;
     private CharSequence mTitle;
     private ActionBarDrawerToggle mDrawerToggle;
+    private TextView lastClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this.getApplicationContext();
+        lastClicked = null;
         createNavigationDrawer();
         getLoggedInUser();
-        selectItem(0);
+        selectItem(1);
     }
 
     @Override
@@ -74,9 +80,11 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         mNavigationDrawerItemTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        NavItem[] drawerItem = new NavItem[2];
+        NavItem[] drawerItem = new NavItem[4];
         drawerItem[0] = new NavItem("Reminders");
-        drawerItem[1] = new NavItem("Sign Out");
+        drawerItem[1] = new NavItem("Upcoming");
+        drawerItem[2] = new NavItem("Done");
+        drawerItem[3] = new NavItem("Sign Out");
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.row_nav_item, drawerItem);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
@@ -88,6 +96,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 R.string.drawer_open,
                 R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        View header = (View)getLayoutInflater().inflate(R.layout.nav_header, null);
+        mDrawerList.addHeaderView(header);
         ActionBar actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(false);
@@ -221,6 +231,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            handleClicksForBoldFont(position,view);
             selectItem(position);
         }
     }
@@ -228,11 +239,18 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     private void selectItem(int position) {
         Fragment fragment = null;
         switch (position) {
-            case 0:
+            case 1:
                 fragment = new ReminderList();
                 break;
-            case 1:
+            case 2:
+                fragment = new ReminderList();
+                break;
+            case 3:
+                fragment = new ReminderList();
+                break;
+            case 4:
                 signOutUser();
+                break;
             default:
                 break;
         }
@@ -243,6 +261,19 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             mDrawerList.setSelection(position);
             setTitle(mNavigationDrawerItemTitles[position]);
             mDrawerLayout.closeDrawer(mDrawerList);
+        }
+    }
+    public void handleClicksForBoldFont(int position, View view) {
+        if(position!=0) {
+            View row = view;
+            TextView rowName = (TextView) row.findViewById(R.id.drawerItem);
+            rowName.setTypeface(null, Typeface.BOLD);
+            if(lastClicked!=null)
+            {
+                Typeface font = Typeface.createFromAsset(context.getAssets(), FONT);
+                lastClicked.setTypeface(font,Typeface.NORMAL);
+            }
+            lastClicked = rowName;
         }
     }
 }

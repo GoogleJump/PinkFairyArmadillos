@@ -12,8 +12,10 @@
     </string-array>
 
     <string-array name="navigation_drawer_items_array">
-        <item>Create</item>
-        <item>Sign out!</item>
+        <item>Reminders</item>
+        <item>Upcoming</item>
+        <item>Done</item>
+        <item>Sign out</item>
     </string-array>
 
     <string name="drawer_open">Open navigation drawer</string>
