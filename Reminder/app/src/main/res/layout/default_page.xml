@@ -6,13 +6,7 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="454dp"
+        android:layout_height="match_parent"
         android:id="@+id/reminderList" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Reminder"
-        android:id="@+id/newReminderButton"
-        android:layout_gravity="bottom" />
 </LinearLayout>

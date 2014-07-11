@@ -29,7 +29,7 @@ public class ReminderView extends LinearLayout {
 
     public void setReminder(Reminder newReminder) {
         reminder = newReminder;
-        reminderText.setText(reminder.getReminderText());
+        reminderText.setText(reminder.getTitle());
 
         requestLayout();
     }

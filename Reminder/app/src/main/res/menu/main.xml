@@ -2,7 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.reminder.app.MainActivity" >
-    
+
+
+
     <item android:id="@+id/sign_out_settings"
         android:title="@string/sign_out_menu"
         app:showAsAction="always" />

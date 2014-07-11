@@ -6,20 +6,22 @@ package com.reminder.app;
 public class Reminder {
     private int id;
     protected int urgency;
-    protected int longitude;
-    protected int latitude;
+    protected double longitude;
+    protected double latitude;
     protected String reminderText;
+    protected String title;
 
     Reminder(String reminder) {
-        reminderText = reminder;
+        title = reminder;
     }
 
-    Reminder(int id, int urgency, int longitude, int latitude, String reminderText) {
+    Reminder(int id, String title, int urgency, double longitude, double latitude, String reminderText) {
         this.id = id;
         this.urgency = urgency;
         this.longitude = longitude;
         this.latitude = latitude;
         this.reminderText = reminderText;
+        this.title = title;
     }
 
     public int getUrgency() {
@@ -30,7 +32,7 @@ public class Reminder {
         this.urgency = urgency;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
@@ -38,7 +40,7 @@ public class Reminder {
         this.latitude = latitude;
     }
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -61,4 +63,14 @@ public class Reminder {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
+
+

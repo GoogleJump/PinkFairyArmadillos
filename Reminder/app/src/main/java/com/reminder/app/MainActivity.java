@@ -16,13 +16,12 @@ package com.reminder.app;
  import android.widget.*;
  import android.app.*;
  import android.app.ActionBar;
+ import android.util.Log;
 
- import java.security.PolicySpi;
-
-public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener {
+public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
     private Context context;
     private static final int RC_SIGN_IN = 0;
-    private static final int PROFILE_PIC_SIZE = 100;
+    private static final int PROFILE_PIC_SIZE = 150;
     private static final String FONT = "Roboto-Thin.ttf";
     private GoogleApiClient mGoogleApiClient;
     private boolean mIntentInProgress;
@@ -49,6 +48,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         createNavigationDrawer();
         getLoggedInUser();
         selectItem(1);
+
     }
 
     @Override
@@ -106,6 +106,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         View mCustomView = mInflater.inflate(R.layout.action_bar_layout, null);
         actionBar.setCustomView(mCustomView);
         actionBar.setDisplayShowCustomEnabled(true);
+        ImageView addReminder = (ImageView)findViewById(R.id.addReminder);
+        addReminder.setOnClickListener(this);
     }
 
     @Override
@@ -238,15 +240,20 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     private void selectItem(int position) {
         Fragment fragment = null;
+        Bundle bundle = new Bundle();
+        bundle.putString("username", "jomivega400@gmail.com");
         switch (position) {
             case 1:
                 fragment = new ReminderList();
+                fragment.setArguments(bundle);
                 break;
             case 2:
                 fragment = new ReminderList();
+                fragment.setArguments(bundle);
                 break;
             case 3:
                 fragment = new ReminderList();
+                fragment.setArguments(bundle);
                 break;
             case 4:
                 signOutUser();
@@ -263,6 +270,18 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             mDrawerLayout.closeDrawer(mDrawerList);
         }
     }
+
+    public void onClick (View v) {
+        Fragment fragment = null;
+        if(v.getId() == R.id.addReminder) {
+           fragment = new Map();
+        }
+        if (fragment != null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        }
+    }
+
     public void handleClicksForBoldFont(int position, View view) {
         if(position!=0) {
             View row = view;

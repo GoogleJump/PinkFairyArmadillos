@@ -12,10 +12,21 @@
         android:focusable="false"
         android:longClickable="false"
         android:src="@drawable/tabbar"
+        android:paddingTop="5dp"
         android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="122dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addReminder"
+        android:src="@drawable/plus"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:paddingTop="5dp" />
+        android:layout_marginRight="20dp" />
 
 
 </RelativeLayout>

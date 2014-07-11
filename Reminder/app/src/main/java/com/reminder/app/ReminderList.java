@@ -10,40 +10,35 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import android.util.*;
+
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Kylie Williamson on 6/15/14.
  */
-public class ReminderList extends Fragment implements View.OnClickListener {
+public class ReminderList extends Fragment {
     private ListView reminderList;
-    private Button addButton;
     protected ReminderListAdapter reminderAdapter;
     protected ArrayList<Reminder> reminderArray;
+    protected String username;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.default_page, container, false);
+        username = getArguments().getString("username");
         initLayout(rootView);
         return rootView;
     }
 
     private void initLayout(View v) {
         reminderList = (ListView)v.findViewById(R.id.reminderList);
-        addButton = (Button)v.findViewById(R.id.newReminderButton);
-        addButton.setOnClickListener(this);
-        // temporary List of reminders to work with - replaced when we get add functionality and local storage
-        Resources object = this.getResources();
-        String[] reminderStrings = object.getStringArray(R.array.reminderList);
-        // fill the ListArray
-        reminderArray = new ArrayList<Reminder>();
-        for (String item: reminderStrings){
-            Reminder current = new Reminder(item);
-            reminderArray.add(current);
-        }
-        reminderAdapter = new ReminderListAdapter(getActivity(), reminderArray);
-        reminderList.setAdapter(reminderAdapter);
+        getReminders();
     }
-
 
     // Not entirely sure this is needed for the final , this'll probably get taken car of on another page
     protected void addReminder(String reminder) {
@@ -52,10 +47,31 @@ public class ReminderList extends Fragment implements View.OnClickListener {
         reminderAdapter.notifyDataSetChanged();
     }
 
-    public void onClick(View view) {
-        if (view.getId() == R.id.newReminderButton)
-        {
-            //TODO Kylie: can go to add reminder page BUT we can have it be part of the action bar with a + button
-        }
+    public void getReminders() {
+        final ArrayList<Reminder> reminders = new ArrayList<Reminder>();
+        Reminder r = new Reminder("First Entry test");
+        reminders.add(r);
+        RESTClient.listReminders(getActivity().getApplicationContext(), username ,new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray returnedItems = (JSONArray) response.get("items");
+                    for (int i = 0; i < returnedItems.length(); i++) {
+                        JSONObject toBeReminder = (JSONObject) returnedItems.get(i);
+                        reminders.add(new Reminder(i, toBeReminder.get("title").toString(), toBeReminder.getInt("urgency"), 9.1, 10.0, toBeReminder.get("reminder").toString()));
+                    }
+                    reminderArray = reminders;
+                    reminderAdapter = new ReminderListAdapter(getActivity(), reminderArray);
+                    reminderList.setAdapter(reminderAdapter);
+                } catch (JSONException e) {
+                    Log.i("JSON Exception: ", e.toString());
+                }
+            }
+            @Override
+            public void onFailure(Throwable e, JSONObject errorResponse) {
+                String msg = "Object *" + e.toString() + "*" + errorResponse.toString();
+                Log.i("testing", "onFailure: " + msg);
+            }
+        });
     }
 }

@@ -3,6 +3,7 @@ package com.reminder.app;
 import android.content.Context;
 import com.loopj.android.http.*;
 import org.apache.http.entity.StringEntity;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import java.util.ArrayList;
@@ -36,21 +37,10 @@ public class RESTClient {
         }
 
     }
-    public static ArrayList listReminders(Context context, String user) {
+    public static void listReminders(Context context, String user, JsonHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("username",user);
-        client.get(context, REMINDER_URL + LIST_REMINDER_URL, params, new JsonHttpResponseHandler() {
-            @Override
-            public void  onSuccess(JSONObject response){
-                Log.i("testing", response.toString());
-              }
-            @Override
-            public void onFailure ( Throwable e, JSONObject errorResponse ) {
-                String msg = "Object *" + e.toString() + "*" + errorResponse.toString();
-                Log.i("testing","onFailure: " + msg);
-            }
-        });
-        return null;
+        client.get(context, REMINDER_URL + LIST_REMINDER_URL, params, handler);
     }
 }
 
