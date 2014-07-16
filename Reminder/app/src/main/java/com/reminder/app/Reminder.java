@@ -1,5 +1,7 @@
 package com.reminder.app;
 
+import java.util.Date;
+
 /**
  * Created by Kylie Williamson on 6/15/14.
  */
@@ -9,17 +11,19 @@ public class Reminder {
     protected int longitude;
     protected int latitude;
     protected String reminderText;
+    protected Date reminderTime;
 
     Reminder(String reminder) {
         reminderText = reminder;
     }
 
-    Reminder(int id, int urgency, int longitude, int latitude, String reminderText) {
+    Reminder(int id, int urgency, int longitude, int latitude, String reminderText, Date reminderTime) {
         this.id = id;
         this.urgency = urgency;
         this.longitude = longitude;
         this.latitude = latitude;
         this.reminderText = reminderText;
+        this.reminderTime = reminderTime;
     }
 
     public int getUrgency() {
@@ -60,5 +64,18 @@ public class Reminder {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Date getReminderTime() {
+        return reminderTime;
+    }
+
+    public void setReminderTime(Date reminderTime) {
+        this.reminderTime = reminderTime;
+    }
+
+    @Override
+    public String toString() {
+        return reminderText;
     }
 }

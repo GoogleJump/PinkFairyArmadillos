@@ -42,8 +42,7 @@ public class ReminderList extends Activity {
         reminderList.setAdapter(reminderAdapter);
     }
 
-
-    // Not entirely sure this is needed for the final , this'll probably get taken car of on another page
+    // Not entirely sure this is needed for the final , this'll probably get taken care of in another page
     protected void addReminder(String reminder) {
         Reminder newReminder = new Reminder(reminder);
         reminderArray.add(newReminder);
