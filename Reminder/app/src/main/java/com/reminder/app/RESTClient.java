@@ -14,6 +14,8 @@ public class RESTClient {
     private static final String REMINDER_URL = "https://flash-energy-585.appspot.com/_ah/api/reminders/v1/reminders/";
     private static final String CREATE_REMINDER_URL = "createreminder";
     private static final String LIST_REMINDER_URL = "list";
+    private static final String DISTANCE_MATRIX_KEY = "AIzaSyCg2Pjekd0kFzFuFjmyZZsPkxlHaUDatBg";
+    private static final String DISTANCE_MATRIX_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 
@@ -42,5 +44,16 @@ public class RESTClient {
         params.put("username",user);
         client.get(context, REMINDER_URL + LIST_REMINDER_URL, params, handler);
     }
+
+    public static void getDrivingTime(Context context, String origin, String destination, JsonHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("origins", origin);
+        params.put("destinations", destination);
+        params.put("mode", "driving");
+        params.put("language", "en");
+        params.put("key", DISTANCE_MATRIX_KEY);
+        client.get(context, DISTANCE_MATRIX_URL,params,handler);
+    }
+
 }
 

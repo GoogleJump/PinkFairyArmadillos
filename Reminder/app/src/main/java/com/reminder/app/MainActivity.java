@@ -11,12 +11,18 @@ package com.reminder.app;
  import com.google.android.gms.common.api.GoogleApiClient;
  import com.google.android.gms.plus.*;
  import com.google.android.gms.plus.model.people.Person;
+ import com.loopj.android.http.JsonHttpResponseHandler;
+
  import android.support.v4.widget.*;
  import android.support.v4.app.ActionBarDrawerToggle;
  import android.widget.*;
  import android.app.*;
  import android.app.ActionBar;
  import android.util.Log;
+
+ import org.json.JSONArray;
+ import org.json.JSONException;
+ import org.json.JSONObject;
 
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
     private Context context;
@@ -48,7 +54,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         createNavigationDrawer();
         getLoggedInUser();
         selectItem(1);
-
+        getTime();
     }
 
     @Override
@@ -294,5 +300,28 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             }
             lastClicked = rowName;
         }
+    }
+
+    public void getTime() {
+        RESTClient.getDrivingTime(context, "Healdsburg, CA", "San Francisco, CA" ,new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray returnedItems = (JSONArray) response.get("rows");
+                    JSONObject item = (JSONObject)returnedItems.get(0);
+                    JSONArray distance = (JSONArray)item.get("elements");
+                    JSONObject obj = (JSONObject)distance.get(0);
+                    JSONObject duration = (JSONObject)obj.get("duration");
+                    String drivingTime = duration.getString("text");
+                } catch (JSONException e) {
+                    Log.i("JSON Exception: ", e.toString());
+                }
+            }
+            @Override
+            public void onFailure(Throwable e, JSONObject errorResponse) {
+                String msg = "Object *" + e.toString() + "*" + errorResponse.toString();
+                Log.i("testing", "onFailure: " + msg);
+            }
+        });
     }
 }

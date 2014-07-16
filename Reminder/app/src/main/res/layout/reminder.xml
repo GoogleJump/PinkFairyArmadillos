@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="#ecf0f1"
+    android:weightSum="1">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/reminderTitle"
+        android:layout_width="113dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:textSize="17dp"
+        android:text="hi"
+        android:layout_weight="0.98"
+        android:layout_gravity="bottom" />
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/reminderDisplay"
-        android:text="Unset Reminder"
-        android:layout_alignBottom="@+id/completedCheck"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center_vertical"
-        android:layout_toLeftOf="@+id/completedCheck"
-        android:layout_marginLeft="16dp"
-        android:textSize="18dp"
-        android:textIsSelectable="false" />
+        android:id="@+id/settings"
+        android:src="@drawable/settings_filled"
+        android:visibility="visible" />
 
-    <CheckBox
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/completedCheck"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-</RelativeLayout>
+</LinearLayout>

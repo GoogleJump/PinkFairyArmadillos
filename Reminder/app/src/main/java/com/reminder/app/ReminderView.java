@@ -21,8 +21,8 @@ public class ReminderView extends LinearLayout {
         inflater.inflate(R.layout.reminder, this, true);
         // find the correct items
         this.reminder = reminder;
-        completedCheck = (CheckBox)findViewById(R.id.completedCheck);
-        reminderText = (TextView)findViewById(R.id.reminderDisplay);
+        //completedCheck = (CheckBox)findViewById(R.id.completedCheck);
+        //reminderText = (TextView)findViewById(R.id.reminderDisplay);
 
         setReminder(reminder);
     }
