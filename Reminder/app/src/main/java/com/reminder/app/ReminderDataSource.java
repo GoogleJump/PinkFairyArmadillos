@@ -43,8 +43,8 @@ public class ReminderDataSource {
         values.put(SQLiteHelper.COLUMN_TIME, reminder.getReminderTime().toString());
     }
 
-    public List<Reminder> getAllReminders() {
-        List<Reminder> reminders = new ArrayList<Reminder>();
+    public ArrayList<Reminder> getAllReminders() {
+        ArrayList<Reminder> reminders = new ArrayList<Reminder>();
         Cursor cursor = database.query(SQLiteHelper.TABLE_REMINDER, allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
