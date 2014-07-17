@@ -1,8 +1,8 @@
 package com.reminder.app;
 
-import android.util.Log;
+import java.util.Calendar;
+import java.util.Date;
 
-import java.lang.reflect.Array;
 
 /**
  * Created by Kylie Williamson on 6/15/14.
@@ -14,18 +14,29 @@ public class Reminder {
     protected double latitude;
     protected String[] reminders;
     protected String title;
+    protected Calendar dueDate;
 
     Reminder(String reminder) {
         title = reminder;
     }
 
-    Reminder(int id, String title, int urgency, double longitude, double latitude, String[] reminders) {
+    Reminder(int id, String title, int urgency, Calendar dueDate, double longitude, double latitude, String[] reminders) {
         this.id = id;
         this.urgency = urgency;
         this.longitude = longitude;
         this.latitude = latitude;
         this.reminders = reminders;
         this.title = title;
+        this.dueDate = dueDate;
+    }
+
+    Reminder(int id, String title, int urgency, Calendar dueDate, double longitude, double latitude) {
+        this.id = id;
+        this.urgency = urgency;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.title = title;
+        this.dueDate = dueDate;
     }
 
     public int getUrgency() {
@@ -70,6 +81,10 @@ public class Reminder {
 
     public String[] getReminders() {
         return reminders;
+    }
+
+    public Calendar getDueDate() {
+        return dueDate;
     }
 }
 

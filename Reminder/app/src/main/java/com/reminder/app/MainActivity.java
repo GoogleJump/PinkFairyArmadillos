@@ -23,6 +23,7 @@ package com.reminder.app;
  import org.json.JSONArray;
  import org.json.JSONException;
  import org.json.JSONObject;
+ import java.util.*;
 
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
     private Context context;
@@ -54,7 +55,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         createNavigationDrawer();
         getLoggedInUser();
         selectItem(1);
-        getTime();
+        //getTime();
     }
 
     @Override

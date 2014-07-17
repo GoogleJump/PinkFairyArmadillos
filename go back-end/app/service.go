@@ -26,8 +26,8 @@ type Reminder struct {
 	Title    string    `json:"title" datastore:",noindex"`
 	Location []float64 `json:"location" datastore:",noindex"`
 	Reminder []string  `json:"reminder" datastore:",noindex"`
-	Date     time.Time `json:"date"`
-	Urgency  int       `json:"urgency"`
+	Date     time.Time `json:"datetime"`
+	Urgency  int       `json:"urgency" datastore:"Urgency"`
 }
 
 // ReminderService
@@ -43,7 +43,7 @@ type ReminderUserQuery struct {
 	UserName string `json:"username" endpoints:"required"`
 }
 
-// List responds with a list of all reminders ordered by Date field.
+// List responds with a list of all reminders ordered by Urgency field.
 // Most recent reminders come first.
 func (gs *ReminderService) List(
 	r *http.Request, req *ReminderUserQuery, resp *RemindersList) error {
@@ -67,13 +67,13 @@ func (gs *ReminderService) List(
 
 // NewReminder is the expected data structure
 type NewReminder struct {
-	List     []string  `json:"reminder" endpoints:"required"`
-	Lat      float64   `json:"latitude" endpoints:"required"`
-	Lng      float64   `json:"longitude" endpoints:"required"`
-	UserName string    `json:"username" endpoints:"required"`
-	Time     time.Time `json:"due date/time" endpoints:"required"`
-	Title    string    `json:"title" endpoints:"required"`
-	Urgency  int       `json:"urgency" endpoints:"required"`
+	List     []string `json:"reminder" endpoints:"required"`
+	Lat      float64  `json:"latitude" endpoints:"required"`
+	Lng      float64  `json:"longitude" endpoints:"required"`
+	UserName string   `json:"username" endpoints:"required"`
+	DateTime string   `json:"due date/time" endpoints:"required"`
+	Title    string   `json:"title" endpoints:"required"`
+	Urgency  int      `json:"urgency" endpoints:"required"`
 }
 
 // createReminder creates a new Reminder based on provided NewReminder.
@@ -88,7 +88,8 @@ func (gs *ReminderService) CreateReminder(
 	reminder.Reminder = append(req.List)
 	reminder.Location = make([]float64, 0)
 	reminder.Location = append(reminder.Location, req.Lat, req.Lng)
-	reminder.Date = time.Now()
+	datetime, _ := time.Parse("2006-01-02 15:04", req.DateTime)
+	reminder.Date = datetime
 	reminder.User = req.UserName
 	reminder.Title = req.Title
 	reminder.Urgency = req.Urgency

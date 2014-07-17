@@ -46,7 +46,10 @@ public class ReminderListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return reminderList.get(groupPosition).getReminders().length;
+        if(reminderList.get(groupPosition).getReminders() != null)
+            return reminderList.get(groupPosition).getReminders().length;
+        else
+            return 0;
     }
 
     @Override
