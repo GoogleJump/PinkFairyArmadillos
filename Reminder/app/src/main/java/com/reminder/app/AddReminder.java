@@ -32,8 +32,6 @@ public class AddReminder extends Activity {
     private Button addButton;
 
     private LocationManager locationManager;
-    private static final long MINIMUM_DISTANCECHANGE_FOR_UPDATE = 1; // in Meters
-    private static final long MINIMUM_TIME_BETWEEN_UPDATE = 1000; // in Milliseconds
     private static final String POINT_LATITUDE_KEY = "POINT_LATITUDE_KEY";
     private static final String POINT_LONGITUDE_KEY = "POINT_LONGITUDE_KEY";
 
@@ -101,7 +99,7 @@ public class AddReminder extends Activity {
         saveCoordinatesInPreferences(Float.parseFloat(latitude.getText().toString()),
                 Float.parseFloat(longitude.getText().toString()));
         addProximityAlert(Float.parseFloat(latitude.getText().toString()),
-                Float.parseFloat(longitude.getText().toString())));
+                Float.parseFloat(longitude.getText().toString()));
     }
 
     private void addProximityAlert(double latitude, double longitude) {
