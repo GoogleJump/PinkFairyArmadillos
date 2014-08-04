@@ -26,7 +26,7 @@ type Reminder struct {
 	Title    string    `json:"title" datastore:",noindex"`
 	Location []float64 `json:"location" datastore:",noindex"`
 	Reminder []string  `json:"reminder" datastore:",noindex"`
-	Date     time.Time `json:"datetime"`
+	Date     time.Time `json:"datetime" datastore:"Date"`
 	Urgency  int       `json:"urgency" datastore:"Urgency"`
 }
 
@@ -34,7 +34,7 @@ type Reminder struct {
 type ReminderService struct {
 }
 
-// ReminderList is a response type of ReminderService.List method
+// ReminderList is a response type of ReminderService.List & ReminderService.ListUpcoming method
 type RemindersList struct {
 	Items []*Reminder `json:"items"`
 }
@@ -44,7 +44,6 @@ type ReminderUserQuery struct {
 }
 
 // List responds with a list of all reminders ordered by Urgency field.
-// Most recent reminders come first.
 func (gs *ReminderService) List(
 	r *http.Request, req *ReminderUserQuery, resp *RemindersList) error {
 
@@ -52,8 +51,50 @@ func (gs *ReminderService) List(
 
 	username := req.UserName
 
-	q := datastore.NewQuery("Reminder").Filter("User =", username)
-	reminder := make([]*Reminder, 0, 10)
+	q := datastore.NewQuery("Reminder").Filter("User =", username).Order("Urgency")
+	reminder := make([]*Reminder, 0, 100)
+	keys, err := q.GetAll(c, &reminder)
+	if err != nil {
+		return err
+	}
+	for i, k := range keys {
+		reminder[i].Id = k.Encode()
+	}
+	resp.Items = reminder
+	return nil
+}
+
+//List responds with a list of all upcoming reminders.
+func (gs *ReminderService) ListUpcoming(
+	r *http.Request, req *ReminderUserQuery, resp *RemindersList) error {
+
+	c := endpoints.NewContext(r)
+
+	username := req.UserName
+
+	q := datastore.NewQuery("Reminder").Filter("User =", username).Filter("Date >", time.Now())
+	reminder := make([]*Reminder, 0, 100)
+	keys, err := q.GetAll(c, &reminder)
+	if err != nil {
+		return err
+	}
+	for i, k := range keys {
+		reminder[i].Id = k.Encode()
+	}
+	resp.Items = reminder
+	return nil
+}
+
+//List responds with a list of all done reminders.
+func (gs *ReminderService) ListDone(
+	r *http.Request, req *ReminderUserQuery, resp *RemindersList) error {
+
+	c := endpoints.NewContext(r)
+
+	username := req.UserName
+
+	q := datastore.NewQuery("Reminder").Filter("User =", username).Filter("Date <=", time.Now())
+	reminder := make([]*Reminder, 0, 100)
 	keys, err := q.GetAll(c, &reminder)
 	if err != nil {
 		return err
@@ -89,7 +130,8 @@ func (gs *ReminderService) CreateReminder(
 	reminder.Location = make([]float64, 0)
 	reminder.Location = append(reminder.Location, req.Lat, req.Lng)
 	datetime, _ := time.Parse("2006-01-02 15:04", req.DateTime)
-	reminder.Date = datetime
+	datetime = time.Parse(time.Now(), datetime)
+	reminder.Date = datetime.UTC()
 	reminder.User = req.UserName
 	reminder.Title = req.Title
 	reminder.Urgency = req.Urgency
@@ -143,6 +185,14 @@ func registerApi() (*endpoints.RpcService, error) {
 	info = rpcService.MethodByName("Delete").Info()
 	info.Name, info.HttpMethod, info.Path, info.Desc =
 		"reminders.delete", "DELETE", "reminders/delete/{id}", "Delete a single reminder."
+
+	info = rpcService.MethodByName("ListUpcoming").Info()
+	info.Name, info.HttpMethod, info.Path, info.Desc =
+		"reminders.listupcoming", "GET", "reminders/listupcoming", "Lists upcoming reminders"
+
+	info = rpcService.MethodByName("ListDone").Info()
+	info.Name, info.HttpMethod, info.Path, info.Desc =
+		"reminders.listdone", "GET", "reminders/listdone", "Lists done reminders"
 
 	return rpcService, nil
 }

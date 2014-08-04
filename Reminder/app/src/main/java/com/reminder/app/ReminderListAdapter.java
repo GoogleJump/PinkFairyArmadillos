@@ -1,22 +1,39 @@
 package com.reminder.app;
 
+import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.LayoutInflater;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.BaseExpandableListAdapter;
-import java.util.List;
+
+import java.util.ArrayList;
 
 public class ReminderListAdapter extends BaseExpandableListAdapter {
+    private Activity activity;
+    private ArrayList<Reminder> reminderList;
+    private int count;
     private Context context;
-    private List<Reminder> reminderList;
+    private PendingIntent pendingIntent;
 
-    public ReminderListAdapter(Context context, List<Reminder> reminderList) {
-        this.context = context;
+    public ReminderListAdapter(Activity activity, ArrayList<Reminder> reminderList) {
+        this.activity = activity;
         this.reminderList = reminderList;
+        this.count = 0;
+        this.context = activity.getBaseContext();
+    }
+
+    public String remove(int position) {
+        Reminder reminderToDelete = reminderList.get(position);
+        String reminderIDToDelete = reminderToDelete.getId();
+        reminderList.remove(position);
+        notifyDataSetChanged();
+        return reminderIDToDelete;
     }
 
     @Override
@@ -30,8 +47,7 @@ public class ReminderListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String[] childText = (String[]) getChild(groupPosition, childPosition);
 
@@ -68,21 +84,33 @@ public class ReminderListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded,
-                             View convertView, ViewGroup parent) {
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
+
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.reminder, null);
         }
         TextView reminderTitle = (TextView)convertView.findViewById(R.id.reminderTitle);
         reminderTitle.setText(headerTitle);
         ImageView settings = (ImageView)convertView.findViewById(R.id.settings);
-        if(isExpanded)
+        ImageView expandableIcon = (ImageView)convertView.findViewById(R.id.expandIcon);
+
+        if(getChildrenCount(groupPosition) == 0 && count <= 11) {
+            expandableIcon.setVisibility(View.INVISIBLE);
+        }
+        count++;
+
+        if(isExpanded) {
             settings.setVisibility(View.VISIBLE);
-        else
+            Drawable downIcon = context.getResources().getDrawable(R.drawable.down);
+            expandableIcon.setImageDrawable(downIcon);
+        }
+        else {
             settings.setVisibility(View.INVISIBLE);
+            Drawable forwardIcon = context.getResources().getDrawable(R.drawable.forward);
+            expandableIcon.setImageDrawable(forwardIcon);
+        }
 
         settings.setOnClickListener(new View.OnClickListener() {
             @Override

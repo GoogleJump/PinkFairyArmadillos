@@ -2,17 +2,11 @@
 <pre-dex-items>
 
     <item
-        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/intermediates/pre-dexed/debug/classes-1c599b43715f97ca2e2108b4ce41514e429945f7.jar"
-        jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/classes.jar"
+        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/intermediates/pre-dexed/debug/classes-9d3c4fbe7a1348333747325a2daf7b30417b627f.jar"
+        jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/classes.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="f71a6822470c9eb659d4f4a6cb57b780b35f058b"/>
-    <item
-        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/intermediates/pre-dexed/debug/classes-3fa617d8d51a495bd3365ec492fd5b7cbac5508b.jar"
-        jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.4.52/classes.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="3dfdf1db5ce5ea2999a5dcde8c8e650b02660059"/>
     <item
         dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/intermediates/pre-dexed/debug/basic-http-client-android-0.88-3bdee9bd01d96622de207f8efabeea5b11ab3b83.jar"
         jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/libs/basic-http-client-android-0.88.jar"
@@ -26,16 +20,22 @@
         revision="19.1.0"
         sha1="d76ea8c3e9a60101244d6d04aff8cc75888570f0"/>
     <item
+        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/intermediates/pre-dexed/debug/classes-11c6fd5dbbd26d906db9c68646a5e9de160191c0.jar"
+        jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/5.0.77/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="b6a82434c1eca686607867cd906bcc80ed987837"/>
+    <item
         dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/intermediates/pre-dexed/debug/android-async-http-1.4.4-d12386f1bbebb8484051b552d3828ba031751f85.jar"
         jar="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/libs/android-async-http-1.4.4.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="3bae85a076241828810bf8fbcc12e5891d5fc34c"/>
     <item
-        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/intermediates/pre-dexed/debug/support-v4-19.0.1-3bf117e59e2e0f41bbf9219f2be90cdcf1dd583d.jar"
-        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.0.1/support-v4-19.0.1.jar"
+        dex="/Users/jordanvega/Developer/go-tictactoe/src/github.com/PinkFairyArmadillos/Reminder/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="587da9a481ffd341d2fa091704489b89845ddacd"/>
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
 
 </pre-dex-items>

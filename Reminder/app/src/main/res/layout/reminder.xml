@@ -8,9 +8,15 @@
     android:weightSum="1">
 
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/expandIcon"
+        android:src="@drawable/forward" />
+
     <TextView
         android:id="@+id/reminderTitle"
-        android:layout_width="113dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:textSize="17dp"

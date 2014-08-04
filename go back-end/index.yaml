@@ -1,1 +1,12 @@
 indexes:
+
+- kind: Reminder
+  properties:
+  - name: User
+  - name: Urgency
+
+
+- kind: Reminder
+  properties:
+  - name: User
+  - name: Date

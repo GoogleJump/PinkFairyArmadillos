@@ -1,26 +1,26 @@
 package com.reminder.app;
 
 import java.util.Calendar;
-import java.util.Date;
 
 
 /**
  * Created by Kylie Williamson on 6/15/14.
  */
 public class Reminder {
-    private int id;
+    private String id;
     protected int urgency;
     protected double longitude;
     protected double latitude;
     protected String[] reminders;
     protected String title;
     protected Calendar dueDate;
+    protected int notificationID;
 
     Reminder(String reminder) {
         title = reminder;
     }
 
-    Reminder(int id, String title, int urgency, Calendar dueDate, double longitude, double latitude, String[] reminders) {
+    Reminder(String id, String title, int urgency, Calendar dueDate, double longitude, double latitude, String[] reminders, int notificationID) {
         this.id = id;
         this.urgency = urgency;
         this.longitude = longitude;
@@ -28,15 +28,17 @@ public class Reminder {
         this.reminders = reminders;
         this.title = title;
         this.dueDate = dueDate;
+        this.notificationID = notificationID;
     }
 
-    Reminder(int id, String title, int urgency, Calendar dueDate, double longitude, double latitude) {
+    Reminder(String id, String title, int urgency, Calendar dueDate, double longitude, double latitude, int notificationID) {
         this.id = id;
         this.urgency = urgency;
         this.longitude = longitude;
         this.latitude = latitude;
         this.title = title;
         this.dueDate = dueDate;
+        this.notificationID = notificationID;
     }
 
     public int getUrgency() {
@@ -63,12 +65,12 @@ public class Reminder {
         this.longitude = longitude;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getNotificationID() {
+        return notificationID;
     }
 
     public String getTitle() {

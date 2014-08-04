@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 public class Receiver extends BroadcastReceiver
 {
@@ -18,7 +17,9 @@ public class Receiver extends BroadcastReceiver
         Intent service1 = new Intent(context, AlarmService.class);
         Bundle extras = intent.getExtras();
         String message = extras.getString("Reminder Title");
+        int ID = extras.getInt("ID");
         service1.putExtra("Reminder Title", message);
+        service1.putExtra("ID", ID);
         context.startService(service1);
 
     }

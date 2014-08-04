@@ -54,7 +54,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         lastClicked = null;
         createNavigationDrawer();
         getLoggedInUser();
-        selectItem(1);
+        ArrayList<Reminder> reminders = new ArrayList<Reminder>();
+        //selectItem(1);
         //getTime();
     }
 
@@ -248,7 +249,9 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     private void selectItem(int position) {
         Fragment fragment = null;
         Bundle bundle = new Bundle();
-        bundle.putString("username", "jomivega400@gmail.com");
+        bundle.putString("username", email);
+        bundle.putInt("type", position);
+        //1 -> list all reminders 2->list upcoming reminders 3-> list done reminders
         switch (position) {
             case 1:
                 fragment = new ReminderList();

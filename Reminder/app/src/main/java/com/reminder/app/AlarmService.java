@@ -3,6 +3,7 @@ package com.reminder.app;
 /**
  * Created by jordanvega on 7/16/14.
  */
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,9 +11,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.PowerManager.*;
 import android.os.PowerManager;
-import android.util.Log;
+import android.os.PowerManager.WakeLock;
 
 
 public class AlarmService extends Service {
@@ -40,6 +40,7 @@ public class AlarmService extends Service {
         super.onStart(intent, startId);
         Bundle extras = intent.getExtras();
         String message = extras.getString("Reminder Title")+ " is due!";
+        int ID = extras.getInt("ID");
 
         mManager = (NotificationManager) this.getApplicationContext().getSystemService(this.getApplicationContext().NOTIFICATION_SERVICE);
         Intent intent1 = new Intent(this.getApplicationContext(),MainActivity.class);
@@ -54,7 +55,7 @@ public class AlarmService extends Service {
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity( this.getApplicationContext(), 0, intent1,PendingIntent.FLAG_UPDATE_CURRENT);
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         notification.setLatestEventInfo(this.getApplicationContext(), "Reminder!", message, pendingNotificationIntent);
-        mManager.notify(0, notification);
+        mManager.notify(ID, notification);
     }
 
     @Override

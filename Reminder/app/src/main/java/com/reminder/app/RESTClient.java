@@ -1,18 +1,24 @@
 package com.reminder.app;
 
 import android.content.Context;
-import com.loopj.android.http.*;
-import org.apache.http.entity.StringEntity;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONArray;
-import java.util.ArrayList;
-import java.util.Arrays;
 import android.util.Log;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 public class RESTClient {
     private static final String REMINDER_URL = "https://flash-energy-585.appspot.com/_ah/api/reminders/v1/reminders/";
     private static final String CREATE_REMINDER_URL = "createreminder";
+    private static final String DELETE_REMINDER_URL = "delete/";
+    private static final String LISTDONE_REMINDER_URL = "listdone";
+    private static final String LISTUPCOMING_REMINDER_URL = "listupcoming";
     private static final String LIST_REMINDER_URL = "list";
     private static final String DISTANCE_MATRIX_KEY = "AIzaSyCg2Pjekd0kFzFuFjmyZZsPkxlHaUDatBg";
     private static final String DISTANCE_MATRIX_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?";
@@ -39,10 +45,28 @@ public class RESTClient {
         }
 
     }
+
+    public static void deleteReminder (Context context, String ID) {
+        Log.i("testing", ID);
+        client.delete(context, REMINDER_URL + DELETE_REMINDER_URL + ID, new JsonHttpResponseHandler(){ });
+    }
+
     public static void listReminders(Context context, String user, JsonHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("username",user);
         client.get(context, REMINDER_URL + LIST_REMINDER_URL, params, handler);
+    }
+
+    public static void listDoneReminders(Context context, String user, JsonHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("username",user);
+        client.get(context, REMINDER_URL + LISTDONE_REMINDER_URL, params, handler);
+    }
+
+    public static void listUpcomingReminders(Context context, String user, JsonHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("username",user);
+        client.get(context, REMINDER_URL + LISTUPCOMING_REMINDER_URL, params, handler);
     }
 
     public static void getDrivingTime(Context context, String origin, String destination, JsonHttpResponseHandler handler) {
