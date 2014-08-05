@@ -17,4 +17,4 @@
         android:background="@color/gray"
         android:listSelector="@color/transparent"/>
 
-</android.support.v4.widget.DrawerLayout>
+    </android.support.v4.widget.DrawerLayout>

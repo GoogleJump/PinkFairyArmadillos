@@ -16,7 +16,7 @@
         android:textColor="#FFFFFF"
         android:padding="10dp"
         android:text="Appname"
-        android:background="@color/appColor"
+        android:background="@color/turquoise"
         android:clickable="false"
         android:focusable="false"
         android:longClickable="false" />

@@ -28,6 +28,8 @@ type Reminder struct {
 	Reminder []string  `json:"reminder" datastore:",noindex"`
 	Date     time.Time `json:"datetime" datastore:"Date"`
 	Urgency  int       `json:"urgency" datastore:"Urgency"`
+	SharedWith  []string `json:"sharedwith" datastore:"SharedWith"`
+
 }
 
 // ReminderService
@@ -115,6 +117,8 @@ type NewReminder struct {
 	DateTime string   `json:"due date/time" endpoints:"required"`
 	Title    string   `json:"title" endpoints:"required"`
 	Urgency  int      `json:"urgency" endpoints:"required"`
+	SharedWith  []string `json:"sharedwith" endpoints:"optional"`
+
 }
 
 // createReminder creates a new Reminder based on provided NewReminder.
@@ -129,9 +133,8 @@ func (gs *ReminderService) CreateReminder(
 	reminder.Reminder = append(req.List)
 	reminder.Location = make([]float64, 0)
 	reminder.Location = append(reminder.Location, req.Lat, req.Lng)
-	datetime, _ := time.Parse("2006-01-02 15:04", req.DateTime)
-	datetime = time.Parse(time.Now(), datetime)
-	reminder.Date = datetime.UTC()
+	datetime, _ := time.Parse("2006-01-02 15:04 -0700", req.DateTime) //give offsets
+	reminder.Date = datetime
 	reminder.User = req.UserName
 	reminder.Title = req.Title
 	reminder.Urgency = req.Urgency
@@ -145,6 +148,34 @@ func (gs *ReminderService) CreateReminder(
 	reminder.Id = key.Encode()
 	return nil
 }
+
+type EditReminder struct {
+	Key       	string    `json:"key" endpoints:"required"`
+	List     		[]string `json:"reminder" endpoints:"required"`
+	Location 		[]float64 `json:"location" endpoints:"required"`
+	Date 				string   `json:"due date/time" endpoints:"required"`
+	Title    		string   `json:"title" endpoints:"required"`
+	Urgency  		int      `json:"urgency" endpoints:"required"`
+	SharedWith  []string `json:"sharedwith" endpoints:"optional"`
+	User   		  string    `json:"user" datastore:"User"`
+}
+
+func (gs *ReminderService) Edit(
+	r *http.Request, req *EditReminder, reminder *Reminder) error {
+
+		c := endpoints.NewContext(r)
+		key, err := datastore.DecodeKey(req.Key)
+		if err != nil {
+			return err
+		}
+		loc := req.Location;
+		sharedWith := req.SharedWith;
+		reminderToEdit := EditReminder{Title:req.Title, Location: loc,
+			List:req.List, Date: req.Date, Urgency:req.Urgency, SharedWith:sharedWith, User:req.User }
+		datastore.Put(c, key, &reminderToEdit)
+		return nil
+}
+
 
 // ReminderIdReq serves as a data structure for identifying a single Reminder.
 type ReminderIdReq struct {
@@ -193,6 +224,10 @@ func registerApi() (*endpoints.RpcService, error) {
 	info = rpcService.MethodByName("ListDone").Info()
 	info.Name, info.HttpMethod, info.Path, info.Desc =
 		"reminders.listdone", "GET", "reminders/listdone", "Lists done reminders"
+
+	info = rpcService.MethodByName("Edit").Info()
+	info.Name, info.HttpMethod, info.Path, info.Desc =
+		"reminders.edit", "POST", "reminders/edit", "Edit a reminder"
 
 	return rpcService, nil
 }

@@ -7,6 +7,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -18,7 +21,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
+import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -29,11 +34,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class ReminderList extends Fragment implements GestureDetector.OnGestureListener {
+public class ReminderList extends Fragment implements GestureDetector.OnGestureListener, View.OnClickListener {
     private GestureDetector detector = new GestureDetector(this);
     private static final int SWIPE_MIN_DISTANCE = 120;
     private static final int SWIPE_MAX_OFF_PATH = 250;
     private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+    private static final String FONT = "Roboto-Thin.ttf";
     private ExpandableListView reminderList;
     protected ReminderListAdapter reminderAdapter;
     protected ArrayList<Reminder> reminderArray;
@@ -56,6 +62,13 @@ public class ReminderList extends Fragment implements GestureDetector.OnGestureL
 
     private void initLayout(View v) {
         reminderList = (ExpandableListView) v.findViewById(R.id.reminderList);
+        FloatingActionButton mFab = (FloatingActionButton)v.findViewById(R.id.fabbutton);
+        Resources res = getResources();
+        Drawable imageAdd = res.getDrawable(R.drawable.plus);
+        int color = res.getColor(R.color.turquoise);
+        mFab.setDrawable(imageAdd);
+        mFab.setColor(color);
+        mFab.setOnClickListener(this);
         getReminders();
     }
 
@@ -222,15 +235,33 @@ public class ReminderList extends Fragment implements GestureDetector.OnGestureL
             if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
             } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                 final int positionInList = reminderList.pointToPosition((int) e1.getX(), (int) e1.getY());
-                Animation slide = AnimationUtils.loadAnimation(context, R.anim.fadeout);
-                slide.setAnimationListener(new Animation.AnimationListener() {
+                Animation slideReminderLayout = AnimationUtils.loadAnimation(context, R.anim.fadeout);
+                slideReminderLayout.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
+                        Animation slideDeleteLayout = AnimationUtils.loadAnimation(context, R.anim.fadein);
+                        slideDeleteLayout.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                            }
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                String reminderToDelete = reminderAdapter.remove(positionInList);
+                                RESTClient.deleteReminder(context,reminderToDelete);
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+                        Typeface font = Typeface.createFromAsset(context.getAssets(), FONT);
+                        TextView deleteRow = (TextView)reminderList.getChildAt(positionInList).findViewById(R.id.delete);
+                        deleteRow.setTypeface(font);
+                        deleteRow.startAnimation(slideDeleteLayout);
                     }
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        String reminderToDelete = reminderAdapter.remove(positionInList);
-                        RESTClient.deleteReminder(context,reminderToDelete);
                     }
 
                     @Override
@@ -238,7 +269,7 @@ public class ReminderList extends Fragment implements GestureDetector.OnGestureL
 
                     }
                 });
-                reminderList.getChildAt(positionInList).startAnimation(slide);
+                reminderList.getChildAt(positionInList).findViewById(R.id.reminderContainer).startAnimation(slideReminderLayout);
             }
         } catch (Exception e) {
         }
@@ -261,5 +292,11 @@ public class ReminderList extends Fragment implements GestureDetector.OnGestureL
     public boolean onSingleTapUp(MotionEvent e) {
         // TODO Auto-generated method stub
         return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent add = new Intent(context, AddReminder.class);
+        startActivity(add);
     }
 }

@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class RESTClient {
     private static final String REMINDER_URL = "https://flash-energy-585.appspot.com/_ah/api/reminders/v1/reminders/";
@@ -26,7 +28,7 @@ public class RESTClient {
     private static AsyncHttpClient client = new AsyncHttpClient();
 
 
-    public static void newReminder(Context context, String username, String title, String[] reminderList, double latitude, double longitude, int urgency) {
+    public static void newReminder( Context context, String username, String title, String[] reminderList, double latitude, double longitude, int urgency) {
         JSONObject jsonParams = new JSONObject();
         JSONArray list = new JSONArray(Arrays.asList(reminderList));
         StringEntity entity;
@@ -44,6 +46,13 @@ public class RESTClient {
             System.out.print(e.toString());
         }
 
+    }
+
+    private String makeDateGoAvailable(Calendar cal) {
+        TimeZone t = cal.getTimeZone();
+        String offset = String.valueOf(t.getRawOffset()/3600);
+        offset = offset.substring(0,1) + "0" + offset.substring(1,offset.length()-1);
+        return  offset;
     }
 
     public static void deleteReminder (Context context, String ID) {

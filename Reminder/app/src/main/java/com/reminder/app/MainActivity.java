@@ -1,35 +1,48 @@
 package com.reminder.app;
 
- import android.content.IntentSender;
- import android.graphics.Typeface;
- import android.os.Bundle;
- import android.content.Context;
- import android.content.Intent;
- import android.view.*;
- import com.google.android.gms.common.ConnectionResult;
- import com.google.android.gms.common.api.GoogleApiClient.*;
- import com.google.android.gms.common.api.GoogleApiClient;
- import com.google.android.gms.plus.*;
- import com.google.android.gms.plus.model.people.Person;
- import com.loopj.android.http.JsonHttpResponseHandler;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
 
- import android.support.v4.widget.*;
- import android.support.v4.app.ActionBarDrawerToggle;
- import android.widget.*;
- import android.app.*;
- import android.app.ActionBar;
- import android.util.Log;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.plus.People.LoadPeopleResult;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.plus.model.people.PersonBuffer;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
- import org.json.JSONArray;
- import org.json.JSONException;
- import org.json.JSONObject;
- import java.util.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener {
+import java.util.ArrayList;
+
+public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, View.OnClickListener, ResultCallback<LoadPeopleResult> {
     private Context context;
     private static final int RC_SIGN_IN = 0;
     private static final int PROFILE_PIC_SIZE = 150;
     private static final String FONT = "Roboto-Thin.ttf";
+    private static final String TAG = "testing";
     private GoogleApiClient mGoogleApiClient;
     private boolean mIntentInProgress;
     private boolean mSignInClicked;
@@ -114,8 +127,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         View mCustomView = mInflater.inflate(R.layout.action_bar_layout, null);
         actionBar.setCustomView(mCustomView);
         actionBar.setDisplayShowCustomEnabled(true);
-        ImageView addReminder = (ImageView)findViewById(R.id.addReminder);
-        addReminder.setOnClickListener(this);
     }
 
     @Override
@@ -209,8 +220,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             currentPerson = getPerson();
             personName = getPersonGooglePlusName();
             email = getPersonEmail();
+            String ID = currentPerson.getId();
             personPhotoURL = getPhotoURL();
             setProfilePicture(personPhotoURL);
+            Plus.PeopleApi.loadVisible(mGoogleApiClient, null).setResultCallback(this);
         }
     }
 
@@ -283,9 +296,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     public void onClick (View v) {
         Fragment fragment = null;
-        if(v.getId() == R.id.addReminder) {
-           fragment = new Map();
-        }
         if (fragment != null) {
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -328,4 +338,21 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             }
         });
     }
+    @Override
+    public void onResult(LoadPeopleResult peopleData) {
+        if (peopleData.getStatus().getStatusCode() == ConnectionResult.SUCCESS) {
+            PersonBuffer personBuffer = peopleData.getPersonBuffer();
+            try {
+                int count = personBuffer.getCount();
+                for (int i = 0; i < count; i++) {
+                    Log.d(TAG, "Display name: " + personBuffer.get(i).getDisplayName() + " " + personBuffer.get(i).getImage().getUrl());
+                }
+            } finally {
+                personBuffer.close();
+            }
+        } else {
+            Log.e(TAG, "Error requesting people data: " + peopleData.getStatus());
+        }
+    }
+
 }
