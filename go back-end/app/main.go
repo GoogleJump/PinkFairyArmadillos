@@ -7,6 +7,7 @@ import (
 func init() {
 
 	registerApi()
-
+	//endpoints.HandleHttp()
+	registerApiUser()
 	endpoints.HandleHttp()
 }
