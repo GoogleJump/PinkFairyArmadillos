@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TimePicker;
@@ -28,15 +29,15 @@ public class AddReminder extends Activity {
     private Switch timeSwitch, locationSwitch;
     private TimePicker time;
     private DatePicker date;
+    private LinearLayout coord;
+    private EditText longi;
+    private EditText lati;
 
     protected String username;
 
     private LocationManager locationManager;
     private static final String POINT_LATITUDE_KEY = "POINT_LATITUDE_KEY";
     private static final String POINT_LONGITUDE_KEY = "POINT_LONGITUDE_KEY";
-
-    //private float LNG = (float) -122.095055;
-    //private float LAT = (float) 37.42446;
 
     private static final long POINT_RADIUS = 100; // in Meters
     private static final long PROX_ALERT_EXPIRATION = -1;
@@ -65,6 +66,9 @@ public class AddReminder extends Activity {
         urgency = (SeekBar)findViewById(R.id.UrgencyBar);
         time = (TimePicker)findViewById(R.id.timePicker);
         date = (DatePicker)findViewById(R.id.datePicker);
+        coord = (LinearLayout)findViewById(R.id.coord);
+        longi = (EditText)findViewById(R.id.lon);
+        lati = (EditText)findViewById(R.id.lat);
 
         timeSwitch = (Switch)findViewById(R.id.TimeSwitch);
         locationSwitch = (Switch)findViewById(R.id.proximitySwitch);
@@ -82,6 +86,9 @@ public class AddReminder extends Activity {
                 String reminderInfo = reminderText.getText().toString();
                 String[] reminderSubtasks = null;
                 Calendar cal = null;
+                double longitude = 9999;
+                double latitude = 9999;
+
                 if(timeSwitch.isChecked()){
                     int day = date.getDayOfMonth();
                     int month = date.getMonth();
@@ -90,18 +97,24 @@ public class AddReminder extends Activity {
                     int hour = time.getCurrentHour();
                     int minute = time.getCurrentMinute();
 
-
                     cal = Calendar.getInstance();
                     cal.set(year, Calendar.JANUARY, day, hour, minute);
                     cal.set(Calendar.MONTH, month);
 
-            }
+                }
+
                 int urg = urgency.getProgress();
                 if(reminderInfo.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please enter text for your reminder.", Toast.LENGTH_SHORT).show();
                 }else {
+                    if(locationSwitch.isChecked()){
+                        longitude = Double.parseDouble(longi.getText().toString());
+                        latitude = Double.parseDouble(lati.getText().toString());
+                        saveProximityAlertPoint(longitude, latitude);
+
+                    }
                     //9999 is the "null" equivalent for longitude and latitude
-                    RESTClient.newReminder(getApplicationContext(), username, reminderInfo, reminderSubtasks, 9999, 9999, urg, cal);
+                    RESTClient.newReminder(getApplicationContext(), username, null, null, reminderInfo, reminderSubtasks, longitude, latitude, urg, cal);
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);
                 }
@@ -123,6 +136,13 @@ public class AddReminder extends Activity {
                     date.setVisibility(View.GONE);
                 }
             }
+            if(compoundButton == locationSwitch){
+                if(locationSwitch.isChecked()){
+                    coord.setVisibility(View.VISIBLE);
+                }else{
+                    coord.setVisibility(View.GONE);
+                }
+            }
         }
     }
 
@@ -135,9 +155,9 @@ public class AddReminder extends Activity {
     /*
     This next section deals with implementing the proximity alerts.
      */
-    private void saveProximityAlertPoint() {
-        //saveCoordinatesInPreferences(LAT,LNG);
-        //addProximityAlert(LAT,LNG);
+    private void saveProximityAlertPoint(double longitude, double latitude) {
+        saveCoordinatesInPreferences((float)longitude,(float)latitude);
+        addProximityAlert(longitude,latitude);
     }
 
     private void addProximityAlert(double latitude, double longitude) {
