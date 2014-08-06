@@ -28,19 +28,25 @@ public class RESTClient {
     private static AsyncHttpClient client = new AsyncHttpClient();
 
 
-    public static void newReminder( Context context, String username, String title, String[] reminderList, double latitude, double longitude, int urgency) {
+    public static void newReminder( Context context, String username, String title, String[] reminderList, double latitude, double longitude, int urgency, Calendar cal) {
         JSONObject jsonParams = new JSONObject();
-        JSONArray list = new JSONArray(Arrays.asList(reminderList));
+        JSONArray list = null;
+        if(reminderList != null) {
+            list = new JSONArray(Arrays.asList(reminderList));
+        }
         StringEntity entity;
         try {
             jsonParams.put("username", username);
             jsonParams.put("title", title);
             jsonParams.put("latitude", latitude);
             jsonParams.put("longitude", longitude);
-            jsonParams.put("reminder",list);
+            jsonParams.put("reminder", list);
             jsonParams.put("urgency", urgency);
             entity = new StringEntity(jsonParams.toString());
             client.post(context, REMINDER_URL+ CREATE_REMINDER_URL, entity, "application/json", new JsonHttpResponseHandler() { });
+            if(cal != null) {
+                makeDateGoAvailable(cal);
+            }
         }
         catch (Exception e) {
             System.out.print(e.toString());
@@ -48,7 +54,7 @@ public class RESTClient {
 
     }
 
-    private String makeDateGoAvailable(Calendar cal) {
+    private static String makeDateGoAvailable(Calendar cal) {
         TimeZone t = cal.getTimeZone();
         String offset = String.valueOf(t.getRawOffset()/3600);
         offset = offset.substring(0,1) + "0" + offset.substring(1,offset.length()-1);

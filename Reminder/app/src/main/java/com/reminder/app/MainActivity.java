@@ -107,8 +107,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         drawerItem[2] = new NavItem("Done");
         drawerItem[3] = new NavItem("Sign Out");
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.row_nav_item, drawerItem);
-        mDrawerList.setAdapter(adapter);
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -127,6 +126,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         View mCustomView = mInflater.inflate(R.layout.action_bar_layout, null);
         actionBar.setCustomView(mCustomView);
         actionBar.setDisplayShowCustomEnabled(true);
+        mDrawerList.setAdapter(adapter);
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
     }
 
     @Override
@@ -219,7 +220,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
             currentPerson = getPerson();
             personName = getPersonGooglePlusName();
-            email = getPersonEmail();
+            //email = getPersonEmail();
             String ID = currentPerson.getId();
             personPhotoURL = getPhotoURL();
             setProfilePicture(personPhotoURL);
@@ -306,7 +307,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         if(position!=0) {
             View row = view;
             TextView rowName = (TextView) row.findViewById(R.id.drawerItem);
-            rowName.setTypeface(null, Typeface.BOLD);
+            //rowName.setTypeface(null, Typeface.BOLD);
             if(lastClicked!=null)
             {
                 Typeface font = Typeface.createFromAsset(context.getAssets(), FONT);

@@ -297,6 +297,7 @@ public class ReminderList extends Fragment implements GestureDetector.OnGestureL
     @Override
     public void onClick(View view) {
         Intent add = new Intent(context, AddReminder.class);
+        add.putExtra("username", username);
         startActivity(add);
     }
 }

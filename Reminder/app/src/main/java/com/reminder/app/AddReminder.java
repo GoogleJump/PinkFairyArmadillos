@@ -10,17 +10,33 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Switch;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class AddReminder extends Activity {
 
     private Button addButton;
+    private EditText reminderText;
+    private SeekBar urgency;
+    private Switch timeSwitch, locationSwitch;
+    private TimePicker time;
+    private DatePicker date;
+
+    protected String username;
 
     private LocationManager locationManager;
     private static final String POINT_LATITUDE_KEY = "POINT_LATITUDE_KEY";
     private static final String POINT_LONGITUDE_KEY = "POINT_LONGITUDE_KEY";
 
-    private float LNG = (float) -122.095055;
-    private float LAT = (float) 37.42446;
+    //private float LNG = (float) -122.095055;
+    //private float LAT = (float) 37.42446;
 
     private static final long POINT_RADIUS = 100; // in Meters
     private static final long PROX_ALERT_EXPIRATION = -1;
@@ -29,10 +45,14 @@ public class AddReminder extends Activity {
             "com.reminder.app.AddReminder";
 
     private objectListener addListener = new objectListener();
+    private onToggleClicked switchListener = new onToggleClicked();
 
     @Override
     public void onCreate(Bundle savedInstanceBundle) {
         super.onCreate(savedInstanceBundle);
+        Bundle extras = getIntent().getExtras();
+        username = extras.getString("username");
+
         initLayout();
         addActionListeners();
     }
@@ -40,8 +60,14 @@ public class AddReminder extends Activity {
     private void initLayout() {
         setContentView(R.layout.add_page);
 
-
+        reminderText = (EditText)findViewById(R.id.ReminderTextField);
         addButton = (Button)findViewById(R.id.addButton);
+        urgency = (SeekBar)findViewById(R.id.UrgencyBar);
+        time = (TimePicker)findViewById(R.id.timePicker);
+        date = (DatePicker)findViewById(R.id.datePicker);
+
+        timeSwitch = (Switch)findViewById(R.id.TimeSwitch);
+        locationSwitch = (Switch)findViewById(R.id.proximitySwitch);
 
         //location stuff
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -52,34 +78,66 @@ public class AddReminder extends Activity {
         public void onClick(View v) {
             if(v == addButton) {
                 //TODO(Kylie): add if for non-populated location
-                saveProximityAlertPoint();
-                //Reminder current = new Reminder(reminderText.getText().toString());
-                //current.setUrgency(urgency.getScrollX());
-                //current.setLongitude(reminderText.getText());
+                //saveProximityAlertPoint();
+                String reminderInfo = reminderText.getText().toString();
+                String[] reminderSubtasks = null;
+                Calendar cal = null;
+                if(timeSwitch.isChecked()){
+                    int day = date.getDayOfMonth();
+                    int month = date.getMonth();
+                    int year =  date.getYear();
 
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                //using this until we get local storage
-                //i.putExtra("remindersBack", reminderText.getText().toString());
-                startActivity(i);
+                    int hour = time.getCurrentHour();
+                    int minute = time.getCurrentMinute();
+
+
+                    cal = Calendar.getInstance();
+                    cal.set(year, Calendar.JANUARY, day, hour, minute);
+                    cal.set(Calendar.MONTH, month);
+
+            }
+                int urg = urgency.getProgress();
+                if(reminderInfo.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter text for your reminder.", Toast.LENGTH_SHORT).show();
+                }else {
+                    //9999 is the "null" equivalent for longitude and latitude
+                    RESTClient.newReminder(getApplicationContext(), username, reminderInfo, reminderSubtasks, 9999, 9999, urg, cal);
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(i);
+                }
+            }
+
+        }
+    }
+
+    public class onToggleClicked implements CompoundButton.OnCheckedChangeListener {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+            if(compoundButton == timeSwitch){
+                if(timeSwitch.isChecked()){
+                    time.setVisibility(View.VISIBLE);
+                    date.setVisibility(View.VISIBLE);
+                }else{
+                    time.setVisibility(View.GONE);
+                    date.setVisibility(View.GONE);
+                }
             }
         }
     }
+
     private void addActionListeners() {
         addButton.setOnClickListener(addListener);
+        timeSwitch.setOnCheckedChangeListener(switchListener);
+        timeSwitch.setOnCheckedChangeListener(switchListener);
     }
 
     /*
     This next section deals with implementing the proximity alerts.
      */
     private void saveProximityAlertPoint() {
-        /*Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (location==null) {
-            Toast.makeText(this, "No last known location. Aborting...",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }*/
-        saveCoordinatesInPreferences(LAT,LNG);
-        addProximityAlert(LAT,LNG);
+        //saveCoordinatesInPreferences(LAT,LNG);
+        //addProximityAlert(LAT,LNG);
     }
 
     private void addProximityAlert(double latitude, double longitude) {
@@ -107,5 +165,15 @@ public class AddReminder extends Activity {
         prefsEditor.putFloat(POINT_LONGITUDE_KEY, longitude);
         prefsEditor.commit();
     }
+
+    /*private Calendar.Month getMonth(int month){
+        switch(month){
+            case 0:
+                return Calendar.JANUARY;
+            default:
+                return 0;
+        }
+
+    }*/
 
 }
