@@ -53,16 +53,34 @@ func (gs *ReminderService) List(
 
 	username := req.UserName
 
-	q := datastore.NewQuery("Reminder").Filter("User =", username).Order("Urgency")
-	reminder := make([]*Reminder, 0, 100)
-	keys, err := q.GetAll(c, &reminder)
+	q := datastore.NewQuery("User").Filter("User =", username)
+	user := make([]*User, 0, 100)
+	keys, err := q.GetAll(c, &user)
 	if err != nil {
 		return err
 	}
-	for i, k := range keys {
-		reminder[i].Id = k.Encode()
+
+	reminderKeys := []string{}
+	for i:= range keys {
+		for _, value := range user[i].Reminders {
+			reminderKeys = append(reminderKeys, value)
+		}
 	}
-	resp.Items = reminder
+	reminders := make([]*Reminder, 0, 100)
+	for _, value := range reminderKeys {
+    query := datastore.NewQuery("Reminder").Filter("__key__ =", value)
+		reminderFound := Reminder{}
+		_, error := query.GetAll(c, &reminderFound)
+		if err != nil {
+			return err
+		}
+		reminders = append(reminders, &reminderFound)
+		if error != nil {
+			return err
+		}
+}
+
+	resp.Items = reminders
 	return nil
 }
 
@@ -139,6 +157,7 @@ func (gs *ReminderService) CreateReminder(
 	reminder.Title = req.Title
 	reminder.Urgency = req.Urgency
 
+
 	key, err := datastore.Put(
 		c, datastore.NewIncompleteKey(c, "Reminder", nil), reminder)
 	if err != nil {
@@ -151,7 +170,7 @@ func (gs *ReminderService) CreateReminder(
 
 type EditReminder struct {
 	Key       	string    `json:"key" endpoints:"required"`
-	List     		[]string `json:"reminder" endpoints:"required"`
+	Reminder     []string `json:"reminder" endpoints:"required"`
 	Location 		[]float64 `json:"location" endpoints:"required"`
 	Date 				string   `json:"due date/time" endpoints:"required"`
 	Title    		string   `json:"title" endpoints:"required"`
@@ -171,7 +190,7 @@ func (gs *ReminderService) Edit(
 		loc := req.Location;
 		sharedWith := req.SharedWith;
 		reminderToEdit := EditReminder{Title:req.Title, Location: loc,
-			List:req.List, Date: req.Date, Urgency:req.Urgency, SharedWith:sharedWith, User:req.User }
+			Reminder:req.Reminder, Date: req.Date, Urgency:req.Urgency, SharedWith:sharedWith, User:req.User }
 		datastore.Put(c, key, &reminderToEdit)
 		return nil
 }

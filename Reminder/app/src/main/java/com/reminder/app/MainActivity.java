@@ -42,7 +42,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     private static final int RC_SIGN_IN = 0;
     private static final int PROFILE_PIC_SIZE = 150;
     private static final String FONT = "Roboto-Thin.ttf";
-    private static final String TAG = "testing";
+    private static final String TAG = "friends";
     private GoogleApiClient mGoogleApiClient;
     private boolean mIntentInProgress;
     private boolean mSignInClicked;
@@ -67,7 +67,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         lastClicked = null;
         createNavigationDrawer();
         getLoggedInUser();
-        ArrayList<Reminder> reminders = new ArrayList<Reminder>();
         //selectItem(1);
         //getTime();
     }
@@ -107,7 +106,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         drawerItem[2] = new NavItem("Done");
         drawerItem[3] = new NavItem("Sign Out");
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.row_nav_item, drawerItem);
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -220,11 +218,14 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
             currentPerson = getPerson();
             personName = getPersonGooglePlusName();
-            //email = getPersonEmail();
+            email = getPersonEmail();
             String ID = currentPerson.getId();
             personPhotoURL = getPhotoURL();
             setProfilePicture(personPhotoURL);
             Plus.PeopleApi.loadVisible(mGoogleApiClient, null).setResultCallback(this);
+            String[] list = new String[1];
+            list[0] = "hi";
+            RESTClient.newReminder(context, email, personName, "ahJzfmZsYXNoLWVuZXJneS01ODVyEQsSBFVzZXIYgICAgIKahQoM", "testing g", list, 0, 0, 10);
         }
     }
 
@@ -307,7 +308,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         if(position!=0) {
             View row = view;
             TextView rowName = (TextView) row.findViewById(R.id.drawerItem);
-            //rowName.setTypeface(null, Typeface.BOLD);
+            rowName.setTypeface(null, Typeface.BOLD);
             if(lastClicked!=null)
             {
                 Typeface font = Typeface.createFromAsset(context.getAssets(), FONT);
